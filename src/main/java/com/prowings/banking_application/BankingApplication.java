@@ -10,6 +10,8 @@ public class BankingApplication {
 		SpringApplication.run(BankingApplication.class, args);
 //		SpringApplication.run(BankingApplication.class, args);
 //		SpringApplication.run(BankingApplication.class, args);
+		
+		System.out.println("testing");
 	}
 
 }
