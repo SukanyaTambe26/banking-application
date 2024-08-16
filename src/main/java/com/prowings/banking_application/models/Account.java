@@ -16,7 +16,7 @@ public class Account {
 	@Column
     private String accountNumber;
 	@Column
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.ZERO;;
 
     // Getters and Setters
     public Long getId() {
@@ -39,8 +39,14 @@ public class Account {
         return balance;
     }
 
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
+    public void setBalance(BigDecimal zero) {
+        this.balance = zero;
     }
 
+	@Override
+	public String toString() {
+		return "Account [id=" + id + ", accountNumber=" + accountNumber + ", balance=" + balance + "]";
+	}
+
+    
 }

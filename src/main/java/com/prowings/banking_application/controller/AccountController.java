@@ -4,8 +4,10 @@ package com.prowings.banking_application.controller;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,24 +23,43 @@ public class AccountController {
     private AccountService accountService;
 
     @PostMapping("/create")
-    public Account createAccount(@RequestParam String accountNumber) {
+    public ResponseEntity<Account> createAccount(@RequestParam String accountNumber) {
         return accountService.createAccount(accountNumber);
+        
     }
+    
+	/*
+	 * @PostMapping("/create") public ResponseEntity<Account>
+	 * createAccount(@RequestBody AccountRequest accountRequest) { if
+	 * (accountRequest.getAccountNumber() == null ||
+	 * accountRequest.getInitialDeposit() == null) { return
+	 * ResponseEntity.badRequest().body("Missing required parameters."); } Account
+	 * account = new Account();
+	 * account.setAccountNumber(accountRequest.getAccountNumber());
+	 * account.setBalance(accountRequest.getInitialDeposit()); 
+	 * Account savedAccount= accountService.saveAccount(account); 
+	 * return ResponseEntity.status(HttpStatus.CREATED).body(savedAccount); }
+	 */
 
     @PostMapping("/deposit")
-    public Account deposit(@RequestParam String accountNumber, @RequestParam BigDecimal amount) {
+    public ResponseEntity<Account> deposit(@RequestParam String accountNumber, @RequestParam BigDecimal amount) {
         return accountService.deposit(accountNumber, amount);
     }
 
     @PostMapping("/withdraw")
-    public Account withdraw(@RequestParam String accountNumber, @RequestParam BigDecimal amount) {
+    public ResponseEntity<Account> withdraw(@RequestParam String accountNumber, @RequestParam BigDecimal amount) {
         return accountService.withdraw(accountNumber, amount);
     }
 
     @GetMapping("/balance")
-    public BigDecimal checkBalance(@RequestParam String accountNumber) {
+    public ResponseEntity<BigDecimal> checkBalance(@RequestParam String accountNumber) {
         Account account = accountService.getAccount(accountNumber);
-        return account != null ? account.getBalance() : BigDecimal.ZERO;
+        if(account != null) {
+        	return ResponseEntity.ok(account.getBalance());
+            }
+            return ResponseEntity.notFound().build();
+        }
+        
     }
 
-}
+
